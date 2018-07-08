@@ -9,33 +9,37 @@
     <link rel="stylesheet" href="css/style.css">
   </head>
   <body>
-    <div class="container">
-        <div class="row">
-            <div class="col-md-4">
-                <div id="join-bar" class="input-group">
-                    <input id="username" type="text" class="form-control" aria-label="message" aria-describedby="basic-addon2">
+    <div class='login page'>
+        <div class='form'>
+            <img src="img/female1.png" alt="female1" class="avatar">
+            <img src="img/male1.png" alt="male1" class="avatar">
+            <img src="img/female2.png" alt="female2" class="avatar">
+            <img src="img/male2.png" alt="male2" class="avatar">
+            <img src="img/female3.png" alt="female3" class="avatar">
+            <h3 class="title">What is your name?</h3>
+            <input class="usernameInput" type="text" maxlength="14" />
+        </div>
+    </div>
+    <div class='chat page'>
+        <div class="container">
+            <audio autoPlay="true" id="audio"></audio>
+            <div id="chat-space">
+                <ul id="messages"></ul>
+                <p id='typing'></p>
+            </div>
+            <div class="row"></div>
+                <div id="chat-bar" class="input-group">
+                    <input id="m" type="text" class="form-control" placeholder="Type here..." aria-label="message" aria-describedby="basic-addon2">
                     <div class="input-group-append">
-                        <button id="user-join" class="btn btn-info" type="button">Join</button>
+                        <button id="send-btn" class="btn btn-success" type="button">Send</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div id="chat-space">
-            <ul id="messages"></ul>
-            <p id='typing'></p>
-        </div>
-        <div class="row"></div>
-            <div id="chat-bar" class="input-group">
-                <input id="m" type="text" class="form-control" placeholder="Type here..." aria-label="message" aria-describedby="basic-addon2">
-                <div class="input-group-append">
-                    <button id="send-btn" class="btn btn-success" type="button">Send</button>
-                </div>
-            </div>
-        </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
     <script src="js/main.js"></script>
   </body>

@@ -1,38 +1,50 @@
 $(function () {
     var socket = io();
+    $(document).ready(function(){
+        $('.chat.page').hide();
+    });
     //　send message
-    $('#send-btn').click(function(){
-        if($('#m').val().length < 1) {
+    $('#m').keyup(function(evt){
+        if (evt.keyCode === 13) {
+            if($('#m').val().length < 1) {
+                return false;
+            }
+            $('send_btn').click();
+            socket.emit('chat message', $('#m').val());
+            $('#m').val('');
             return false;
         }
-        socket.emit('chat message', $('#m').val());
-        $('#m').val('');
-        return false;
     });
     // receive message
     socket.on('chat message', function(payload){
-        $('#messages').append($('<li>').text(payload.username+': '+payload.msg));
+        log(payload, ': '+payload.msg);
+        speak(payload.msg);
     });
-    $('#user-join').click(function(){
-        if($('#username').val().length < 1) {
-            return false;
+    $('.avatar').click(function(){
+        $('.avatar').filter(".selected").removeClass('selected');
+        $(this).addClass('selected');
+    });
+    $('.usernameInput').keyup(function(evt){
+        if (evt.keyCode === 13) {
+            if($('.usernameInput').val().length < 1) {
+                return false;
+            }
+            var user_info = {
+                'username': $('.usernameInput').val(),
+                'avatar': $('.avatar.selected')[0].alt
+            }
+            socket.emit('user join', user_info);
         }
-        socket.emit('user join', $('#username').val());
     });
-    socket.on('user join', function(username){
-        $('#messages').append($('<li>').text(username+' joined the room'));
-        $('#username').val('');
-        // $('#join-form').hide();
+    socket.on('user join', function(payload){
+        $('.login.page').hide();
+        $('.chat.page').show();
+        log(payload, 'joined the room');
+        $('#usernameInput').val('');
     });
-    socket.on('user leave', function(username){
-        $('#messages').append($('<li>').text(username+' left the room'));
+    socket.on('user leave', function(payload){
+        log(payload, 'left the room');
     });
-    // typing 계산 알고리즘
-    // 1. 타이핑한 마지막 시간 저장(타이핑할 때마다 갱신됨)
-    // 2. 타이머 시간 후 시간 구함
-    // 3. 그 시간과 마지막 시간의 차(타이핑 안 하던 시간)가 
-    // 타이머 시간보다 더 길 경우
-    // 4. typing에 false를 대입
     $('#m').on('input',function(){
         socket.emit('typing');
     });
@@ -42,4 +54,28 @@ $(function () {
     socket.on('stop typing', function(){
         $('#typing').text('');
     });
+
 });
+
+// text-to-speech
+// test url: /api/synthesize?text=shindekudasai&voice=en-US_AllisonVoice&download=true&accept=audio%2Fmp3
+function speak(msg) {
+    fetch('/api/synthesize'+'?text='+msg)
+    .then(function(response){
+        if (response.ok) {
+          response.blob().then(function(blob){
+            var url = window.URL.createObjectURL(blob);
+            audio.setAttribute('src', url);
+            audio.setAttribute('type', 'audio/ogg;codecs=opus');
+          });
+        }
+    });
+}
+
+function log(payload, message){
+    const imageEl = document.createElement('img');
+    imageEl.classList.add('avatar_small');
+    imageEl.src = 'img/'+payload.avatar+'.png';
+    $('#messages').append(
+        $('<li>').append(imageEl).append(payload.username+' '+message));
+}
